@@ -1,0 +1,67 @@
+vamos a crear una aplicación para llevar la disponibilidad de una renta de vehículos.
+
+la aplicación debe poder registrar vehículos los atributos serán:
+id (UUID)
+modelo(String)
+marca(string)
+imagen (dame una recomendacion para esto)
+cilindrada (int)
+categoria(ENUM[Scooter, Moto, ATV, UTV, Camion])
+ubicacion_actual (Enum["Playa Chiquita", "Puerto Viejo", "Playa negra", "B.Azul", "Taller Nico"]) 
+estado (Enum["Rentada", "Disponible", "Fuera de Servicio"])
+precios(los precios estan en las imagenes en la ruta "\images\precios y vehiculos 1.jpeg" y "\images\precios y vehiculos 2.jpeg")
+cantidad (Int)
+fechaHoraFinalizacion (dateTime) Solo aplica para estados de "Rentada" ya que sera la fecha en la que vuelva a estar disponible automaticamente si no esta en este estado este dato ser "null"
+
+la idea es que la aplicacion tenga una migracion que carge almenos los vehiculos de estas dos imagenes si no entiendes alguna me avisas y te digo lo que dice, puedes agregar el MCP de chrome dev tools para buscar el resto de la informacion de los vehiculos. En la seccion de tus preguntas me puedes preguntar vehiculo por vehiculo cuanta cantidad poner en cada uno.
+
+habra una relacion de 1 a muchos entre vehiculos y placas 
+un vehiculo puede tener varias placas
+las propiedades seran 
+id(UUID)
+placa(String) esta es opcional entonces en caso de no ser agregada esta dira "NUEVA" con opcion de cambiarla despues
+id_vehiculo (Foreing key)
+
+
+
+habran dos tipos de usuario 
+Admin: este podra ver metricas, registrar vehiculos, crear usuarios, reservar vehiculos, ver disponibilidad
+Empleado:reservar vehiculos, ver disponibilidad
+las propiedades de los usuarios por el momento solo seran 
+id (UUID)
+userName (String) unique
+password (Hash)
+debe haber una migracion que agregue 4 usuarios ("Oscar" y "Daniel" con rol de empleado) y ("Ivan" y "Fabian" con rol de admin)
+
+
+la pantalla del admin mostratra:
+dasboard (con metricas como vehiculo mas popular, usuario que mas renta, mes que mas se renta, vehiculo que deja mas dinero, entre algun otro que recomiendes)
+disponibilidad (se mostrara opciones para buscar primero por categoria, luego mostrara los vehiculos de esa categoria en estado disponible adelantando cuantos de cada uno hay en cada ubicacion,  luego al entrar al vehiculo mostrara las placas disponibles y en donde se ubican con al posibilidad de seleccionar uno o multiples y rentarlas agregando solo una fecha y hora de finalizacion la fecha y hora de inicio por defecto sera la del momento (Zona horaria CR) al momento de seleccionar las motos aparecera la opcion de "Rentar" y la de "Poner en fuera de servicio o Habilitar dependiendo del estado que ya tiene el vehiculo" a los empleados solo la opcion de rentar de "Rentar")
+Registro de usuarios (Form para crear usuario nuevo)
+Registro de Vehiculos (form para crear vehiculo)
+
+la pantalla del empleado solo mostrara la parte de disponibilidad de la forma que dije antes.
+
+usaremos la siguente architectura
+BD = Postgres SQL
+Backend = fastAPI Python
+Frontend = next JS
+
+utiliza docker para tener la BD y el backend en contenedores cuando termines puede agregar el MCP de render y vercel para que subas los contenedores a render en produccion 
+y el front se subira en vercel
+
+deja la prevista para poner imagenes reales sin fondo de cada vehiculo y yo las descargare y te las dejare en una carpeta para que pongas despues
+
+vamos a crear el plan de implementacion completo de la app y los dividiras en fases que tendran microtareas evalua cuales se deben hacer en simultaneo y cuales en secuencia para que a la hora de la implementacion de puedan lanzar subagentes y se lo mas especofico y granular posible para que los subagantes puedan implementar las tareas utilizando modelos que no gasten tantos tokens como haikiu o sonnet
+
+preguntame por cualquier ambiguedad o problema que notes 
+
+utiliza un diseño moderno acorde a las ultimos proyectos que hemos creado ademas de utilizar Blanco, Negro y rojo (el mismo rojo de la marca Honda)
+
+la aplicacion debe verse bien en diferentes dispositivos (Computadora, Tablet y movil) pero ten en cuenta que se usura mas mediante celulares entonces usemos una metodologia "mobile first"
+
+utiliza el logo "\images\Mistery-Jungle-Logo.png"
+
+la idea es tener una demo funcional para mostrar mañana entonces una vez aprobado el plan inicial implementa todas las fases hasta el lanzamiendo de corrido para avanzar rapido si aprueban la aplicacion ya haremos el proyecto de una forma mas cuidadosa, esto no significa que puedan haber errores ya que si sale un error en la presentacion de la demo puede ser contraproducente.
+
+
