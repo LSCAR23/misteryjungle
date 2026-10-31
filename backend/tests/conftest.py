@@ -5,7 +5,9 @@ import pytest
 from alembic import command
 from alembic.config import Config
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
+import uuid
+
+from sqlalchemy import create_engine, make_url, text
 from sqlalchemy.orm import Session
 
 from app.config import normalizar_url
@@ -35,14 +37,27 @@ def _migrar(url: str) -> None:
 
 @pytest.fixture(scope="session")
 def engine():
-    url = os.environ.get("TEST_DATABASE_URL")
-    if not url:
+    """Crea una BD temporal propia de esta ejecución (así corridas en paralelo no chocan)."""
+    base = os.environ.get("TEST_DATABASE_URL")
+    if not base:
         pytest.skip("TEST_DATABASE_URL no está definida")
-    url = normalizar_url(url)
-    _migrar(url)
-    eng = create_engine(url, pool_pre_ping=True)
-    yield eng
-    eng.dispose()
+    base_url = make_url(normalizar_url(base))
+    nombre = f"{base_url.database}_{uuid.uuid4().hex[:8]}"
+    admin = create_engine(base_url.set(database="postgres"), isolation_level="AUTOCOMMIT")
+    with admin.connect() as conn:
+        conn.execute(text(f'CREATE DATABASE "{nombre}"'))
+    url = base_url.set(database=nombre).render_as_string(hide_password=False)
+    eng = None
+    try:
+        _migrar(url)
+        eng = create_engine(url, pool_pre_ping=True)
+        yield eng
+    finally:
+        if eng is not None:
+            eng.dispose()
+        with admin.connect() as conn:
+            conn.execute(text(f'DROP DATABASE IF EXISTS "{nombre}" WITH (FORCE)'))
+        admin.dispose()
 
 
 @pytest.fixture

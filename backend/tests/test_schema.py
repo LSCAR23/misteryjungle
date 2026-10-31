@@ -49,9 +49,9 @@ def test_placas_nueva_duplicadas_ok_y_reales_unicas(db):
 
 
 def test_username_unico_case_insensitive(db):
-    db.add(Usuario(username="Oscar", password_hash="x", rol=Rol.EMPLEADO))
+    db.add(Usuario(username="Prueba_Unico", password_hash="x", rol=Rol.EMPLEADO))
     db.flush()
     with pytest.raises(IntegrityError):
         with db.begin_nested():
-            db.add(Usuario(username="oSCAR", password_hash="x", rol=Rol.ADMIN))
+            db.add(Usuario(username="pRUEBA_unico", password_hash="x", rol=Rol.ADMIN))
             db.flush()

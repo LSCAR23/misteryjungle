@@ -18,6 +18,8 @@ services:
 
   api:
     build: ./backend
+    # En local recarga el código al guardar (en Render se usa el CMD del Dockerfile)
+    command: sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
     env_file: .env
     environment:
       # Dentro de la red de compose la BD es db:5432, no localhost:5433
