@@ -95,7 +95,7 @@ function Content({ m }: { m: Metricas }) {
   }));
   const porVehiculo = m.por_vehiculo
     .slice(0, 8)
-    .map((d) => ({ label: d.vehiculo, full: d.vehiculo, value: d.ingresos }));
+    .map((d) => ({ label: d.vehiculo.replace(/^Honda /, ""), full: d.vehiculo, value: d.ingresos }));
   const porCategoria = m.por_categoria.map((d) => ({
     label: CATEGORIAS.find((c) => c.value === d.categoria)?.label ?? d.categoria,
     value: d.rentas,
@@ -119,7 +119,7 @@ function Content({ m }: { m: Metricas }) {
         <KpiCard
           label="Ocupación actual"
           value={`${Math.round(k.ocupacion_actual * 100)}%`}
-          sub={`${k.unidades_rentadas} de ${k.unidades_total} unidades`}
+          sub={`${k.unidades_rentadas} de ${k.unidades_total - k.unidades_fuera_servicio} operativas`}
         />
         <KpiCard
           label="Por recibir"

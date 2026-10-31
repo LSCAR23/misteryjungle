@@ -56,18 +56,18 @@ export function BarChartBasic({ data, horizontal, format = String, seriesName, e
             <YAxis
               type="category"
               dataKey="label"
-              width={96}
+              width={110}
               tick={tick}
               tickLine={false}
               axisLine={{ stroke: "var(--border)" }}
               interval={0}
-              tickFormatter={(v: string) => truncate(v, 14)}
+              tickFormatter={(v: string) => truncate(v, 16)}
             />
           </>
         ) : (
           <>
             <XAxis dataKey="label" tick={tick} tickLine={false} axisLine={{ stroke: "var(--border)" }} interval={0} />
-            <YAxis tick={tick} tickLine={false} axisLine={false} width={44} tickFormatter={fmt} allowDecimals={false} />
+            <YAxis tick={tick} tickLine={false} axisLine={false} width={60} tickFormatter={fmt} allowDecimals={false} />
           </>
         )}
         <Tooltip
