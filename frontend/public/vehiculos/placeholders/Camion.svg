@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 140" width="240" height="140">
+  <g fill="#9A9A9A">
+    <rect x="18" y="60" width="112" height="8" rx="2"/>
+    <rect x="18" y="66" width="112" height="30" rx="3"/>
+    <rect x="18" y="96" width="206" height="8" rx="2"/>
+    <path fill-rule="evenodd" d="M136 96 L136 50 Q136 40 146 40 L200 40 Q214 40 220 56 L226 92 Q226 98 220 98 L136 98 Z M150 50 L198 50 Q206 50 210 60 L214 74 L150 74 Z"/>
+    <circle cx="58" cy="109" r="16"/>
+    <circle cx="190" cy="109" r="16"/>
+  </g>
+  <g fill="#C4C4C4">
+    <circle cx="58" cy="109" r="6"/>
+    <circle cx="190" cy="109" r="6"/>
+  </g>
+</svg>

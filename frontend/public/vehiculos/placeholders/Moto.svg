@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 140" width="240" height="140">
+  <g fill="#9A9A9A">
+    <path d="M60 80 Q66 72 78 74 L84 80 L62 86 Z"/>
+    <path d="M70 66 Q74 60 90 62 L126 66 Q132 68 130 74 L72 78 Q68 74 70 66 Z"/>
+    <path d="M92 60 Q96 48 116 48 L150 50 Q160 52 158 62 Q156 70 146 72 L100 74 Q90 72 92 60 Z"/>
+    <rect x="112" y="72" width="38" height="28" rx="6"/>
+    <polygon points="52,100 108,84 112,92 56,108"/>
+    <polygon points="150,74 158,74 142,98 134,98"/>
+    <rect x="160" y="36" width="20" height="6" rx="3"/>
+    <rect x="170" y="40" width="8" height="18" rx="2"/>
+    <polygon points="170,58 182,58 192,100 184,104"/>
+    <path d="M166 100 Q186 74 206 100 L200 102 Q186 82 172 102 Z"/>
+    <circle cx="52" cy="103" r="22"/>
+    <circle cx="186" cy="103" r="22"/>
+  </g>
+  <g fill="#C4C4C4">
+    <circle cx="52" cy="103" r="8"/>
+    <circle cx="186" cy="103" r="8"/>
+  </g>
+</svg>
