@@ -163,7 +163,7 @@ export default function VehiculoDetalleView({ vehiculoId, backHref }: { vehiculo
       <PageHeader title={nombre} backHref={backHref} className="md:hidden" />
       <div className="grid gap-4 md:grid-cols-2 md:items-center">
         <div className="overflow-hidden rounded-2xl border border-border">
-          <VehicleImage src={data.imagen} categoria={data.categoria} alt={nombre} />
+          <VehicleImage src={data.imagen} categoria={data.categoria} alt={nombre} priority sizes="(min-width: 768px) 50vw, 100vw" />
         </div>
         <div>
           <div className="hidden md:block">
@@ -173,7 +173,7 @@ export default function VehiculoDetalleView({ vehiculoId, backHref }: { vehiculo
             {data.cilindrada} cc · {catLabel}
           </p>
           <p className="mt-2 text-sm font-semibold tabular-nums">
-            <span className="text-ok">{disp} disponibles</span> · {rent} rentadas · {fuera} fuera de servicio
+            <span className="text-ok">{disp} {disp === 1 ? "disponible" : "disponibles"}</span> · {rent} {rent === 1 ? "rentada" : "rentadas"} · {fuera} fuera de servicio
           </p>
         </div>
       </div>

@@ -61,7 +61,7 @@ export default function AdminVehiculosPage() {
                       >
                         <Card interactive className="flex items-center gap-3 overflow-hidden p-2 pr-4">
                           <div className="w-28 shrink-0">
-                            <VehicleImage src={v.imagen} categoria={v.categoria} alt="" className="rounded-xl" />
+                            <VehicleImage src={v.imagen} categoria={v.categoria} alt="" className="rounded-xl" sizes="112px" />
                           </div>
                           <div className="min-w-0">
                             <p className="truncate font-semibold">
