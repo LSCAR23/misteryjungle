@@ -1,13 +1,6 @@
-# Blueprint de Render: base de datos Postgres + API FastAPI (Docker), plan free en Ohio.
-# El frontend va en Vercel. Los secretos usan `sync: false`: Render los pide al crear el Blueprint.
-databases:
-  - name: misteryjungle-db
-    plan: free
-    region: ohio
-    postgresMajorVersion: "16"
-    databaseName: misteryjungle
-    user: mj
-
+# Blueprint de Render: solo la API FastAPI (Docker), plan free en Ohio.
+# La base de datos está en Neon (Postgres serverless) y el frontend en Vercel.
+# Los secretos usan `sync: false`: se cargan en el dashboard de Render, nunca en este archivo.
 services:
   - type: web
     name: misteryjungle-api
@@ -19,15 +12,14 @@ services:
     healthCheckPath: /api/health
     autoDeploy: true
     envVars:
+      # Cadena de conexión de Neon (con ?sslmode=require)
       - key: DATABASE_URL
-        fromDatabase:
-          name: misteryjungle-db
-          property: connectionString
+        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: SEED_MOCK_DATA
         value: "true"
-      # Contraseña de los 4 usuarios iniciales (se pide al crear el Blueprint)
+      # Contraseña de los 4 usuarios iniciales
       - key: SEED_PASSWORD
         sync: false
       # Dominio(s) del frontend en Vercel, separados por coma
