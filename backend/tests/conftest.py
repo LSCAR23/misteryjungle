@@ -68,3 +68,41 @@ def client(db):
     with TestClient(app) as c:
         yield c
     app.dependency_overrides.clear()
+
+
+# --- fixtures de autenticacion (B6) ---
+import uuid as _uuid  # noqa: E402
+
+from app.enums import Rol  # noqa: E402
+from app.models import Usuario  # noqa: E402
+from app.security import create_access_token, hash_password  # noqa: E402
+
+
+@pytest.fixture
+def make_user(db):
+    """Fabrica de usuarios via ORM: make_user(rol=Rol.EMPLEADO, password=..., username=None, activo=True)."""
+
+    def _make(rol=Rol.EMPLEADO, password="secreto1", username=None, activo=True):
+        user = Usuario(
+            username=username or f"t_{_uuid.uuid4().hex[:10]}",
+            password_hash=hash_password(password),
+            rol=Rol(rol),
+            activo=activo,
+        )
+        db.add(user)
+        db.flush()
+        return user
+
+    return _make
+
+
+@pytest.fixture
+def admin_headers(make_user):
+    u = make_user(rol=Rol.ADMIN)
+    return {"Authorization": f"Bearer {create_access_token(u.id, u.rol)}"}
+
+
+@pytest.fixture
+def empleado_headers(make_user):
+    u = make_user(rol=Rol.EMPLEADO)
+    return {"Authorization": f"Bearer {create_access_token(u.id, u.rol)}"}
