@@ -60,12 +60,9 @@ export default function AdminVehiculosPage() {
                         className="block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red"
                       >
                         <Card interactive className="flex items-center gap-3 overflow-hidden p-2 pr-4">
-                          <VehicleImage
-                            src={v.imagen}
-                            categoria={v.categoria}
-                            alt=""
-                            className="w-28 shrink-0 rounded-xl"
-                          />
+                          <div className="w-28 shrink-0">
+                            <VehicleImage src={v.imagen} categoria={v.categoria} alt="" className="rounded-xl" />
+                          </div>
                           <div className="min-w-0">
                             <p className="truncate font-semibold">
                               {v.marca} {v.modelo}
