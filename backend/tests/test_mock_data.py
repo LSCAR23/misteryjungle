@@ -101,3 +101,17 @@ def test_falla_si_hay_rentas(db):
     generar(conn, FIXED)
     with pytest.raises(RuntimeError):
         generar(conn, FIXED)
+
+
+def test_reset_demo_endpoint(client, db, admin_headers, empleado_headers):
+    """El admin reinicia la demo: se borran extras y se regenera el mock."""
+    import sqlalchemy as sa
+
+    assert client.post("/api/demo/reset", headers=empleado_headers).status_code == 403
+    r = client.post("/api/demo/reset", headers=admin_headers)
+    assert r.status_code == 200, r.text
+    assert r.json()["rentadas"] == 12
+    # El usuario admin temporal del fixture no es de los 4 originales: se borró
+    usuarios = db.execute(sa.text("SELECT count(*) FROM usuarios")).scalar()
+    assert usuarios == 4
+    assert db.execute(sa.text("SELECT count(*) FROM vehiculos")).scalar() == 13
