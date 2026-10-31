@@ -240,7 +240,7 @@ export default function VehiculoForm() {
               aria-label="Menos unidades"
               disabled={placas.length <= 1}
               onClick={() => setCantidad(placas.length - 1)}
-              className="size-11 px-0"
+              className="size-11 !px-0"
             >
               <Minus className="size-5" />
             </Button>
@@ -252,7 +252,7 @@ export default function VehiculoForm() {
               aria-label="Más unidades"
               disabled={placas.length >= MAX_PLACAS}
               onClick={() => setCantidad(placas.length + 1)}
-              className="size-11 px-0"
+              className="size-11 !px-0"
             >
               <Plus className="size-5" />
             </Button>
