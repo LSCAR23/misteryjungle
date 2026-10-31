@@ -1,5 +1,6 @@
 "use client";
 
+import { CalendarPlus } from "lucide-react";
 import { Badge, Button, Checkbox, UbicacionChip, cn } from "@/components/ui";
 import { UBICACION_NO_ACTUALIZADA } from "@/lib/constants";
 import { formatCR, formatHoraCR } from "@/lib/time";
@@ -21,10 +22,11 @@ interface Props {
   selected: boolean;
   onToggle: () => void;
   onRecibir: () => void;
+  onExtender?: () => void;
   now: number;
 }
 
-export function RecibirItem({ data, variant, selected, onToggle, onRecibir, now }: Props) {
+export function RecibirItem({ data, variant, selected, onToggle, onRecibir, onExtender, now }: Props) {
   const vehiculo = data.kind === "renta" ? data.renta.vehiculo : data.placa.vehiculo;
   const placa = data.kind === "renta" ? data.renta.placa : data.placa.placa;
   const atrasada =
@@ -68,9 +70,17 @@ export function RecibirItem({ data, variant, selected, onToggle, onRecibir, now 
           </>
         )}
       </div>
-      <Button size="sm" variant="outline" onClick={onRecibir} className="min-h-11 shrink-0">
-        Recibir
-      </Button>
+      <div className="flex shrink-0 flex-wrap justify-end gap-2">
+        {onExtender && data.kind === "renta" && (
+          <Button size="sm" variant="outline" onClick={onExtender} className="min-h-11 shrink-0">
+            <CalendarPlus className="size-4" aria-hidden="true" />
+            Extender
+          </Button>
+        )}
+        <Button size="sm" variant="outline" onClick={onRecibir} className="min-h-11 shrink-0">
+          Recibir
+        </Button>
+      </div>
     </div>
   );
 }

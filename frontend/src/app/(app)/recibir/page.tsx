@@ -7,7 +7,8 @@ import { Badge, Button, EmptyState, PageHeader, Skeleton } from "@/components/ui
 import { RecibirItem, recibirKey, type RecibirData, type RecibirVariant } from "@/components/rentas/RecibirItem";
 import { RecibirSheet } from "@/components/rentas/RecibirSheet";
 import { swrFetcher } from "@/lib/api";
-import type { RecibirResponse } from "@/lib/types";
+import ExtenderSheet from "@/components/rentas/ExtenderSheet";
+import type { Renta, RecibirResponse } from "@/lib/types";
 
 interface Section {
   id: RecibirVariant;
@@ -27,6 +28,7 @@ export default function RecibirPage() {
     return () => clearInterval(t);
   }, []);
   const [target, setTarget] = useState<string[] | null>(null);
+  const [extender, setExtender] = useState<Renta | null>(null);
 
   const allSections: Section[] = data
     ? [
@@ -86,6 +88,15 @@ export default function RecibirPage() {
     ]);
   }
 
+  async function extenderDone() {
+    await Promise.all([
+      mutate(),
+      globalMutate(
+        (key) => typeof key === "string" && (key.startsWith("/disponibilidad") || key.startsWith("/vehiculos")),
+      ),
+    ]);
+  }
+
   return (
     <div className={activeSel.length > 0 ? "pb-28" : undefined}>
       <PageHeader title="Recibir" subtitle="Actualiza dónde quedó cada vehículo al recibirlo" />
@@ -135,6 +146,11 @@ export default function RecibirPage() {
                     selected={selected.has(key)}
                     onToggle={() => toggle(key)}
                     onRecibir={() => setTarget([key])}
+                    onExtender={
+                      it.kind === "renta" && s.id !== "sin_ubicacion"
+                        ? () => setExtender(it.renta)
+                        : undefined
+                    }
                   />
                 );
               })}
@@ -153,6 +169,13 @@ export default function RecibirPage() {
           </div>
         </div>
       )}
+
+      <ExtenderSheet
+        open={extender !== null}
+        onClose={() => setExtender(null)}
+        renta={extender}
+        onDone={extenderDone}
+      />
 
       <RecibirSheet
         open={target !== null}
