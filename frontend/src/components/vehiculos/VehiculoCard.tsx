@@ -20,7 +20,7 @@ export default function VehiculoCard({ vehiculo: v }: { vehiculo: VehiculoDispon
               <h2 className="truncate font-display text-xl font-bold uppercase tracking-wide">{nombre}</h2>
               <p className="text-sm text-ink-muted">{v.cilindrada} cc</p>
             </div>
-            <Badge tone={vacio ? "off" : "ok"}>{vacio ? "Sin disponibles" : `${v.disponibles} disponibles`}</Badge>
+            <Badge tone={vacio ? "off" : "ok"}>{vacio ? "Sin disponibles" : `${v.disponibles} ${v.disponibles === 1 ? "disponible" : "disponibles"}`}</Badge>
           </div>
           {v.por_ubicacion.length > 0 && (
             <div className="flex flex-wrap gap-1.5">

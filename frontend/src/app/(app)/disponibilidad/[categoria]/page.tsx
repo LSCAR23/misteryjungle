@@ -45,7 +45,7 @@ export default function CategoriaPage() {
       <PageHeader
         backHref="/disponibilidad"
         title={categoriaLabel(categoria)}
-        subtitle={total !== undefined ? `${total} disponibles en total` : undefined}
+        subtitle={total !== undefined ? `${total} ${total === 1 ? "disponible" : "disponibles"} en total` : undefined}
       />
       {error && !data ? (
         <EmptyState
