@@ -106,6 +106,7 @@ Enums se guardan como `VARCHAR` + `CHECK` (SQLAlchemy `Enum(..., native_enum=Fal
 3. Recibir (cualquier rol) una renta `activa` o `vencida_sin_recibir` con una ubicación real: renta → `finalizada`, `ubicacion_recibida`, `recibida_por`, `recibida_en=now`; si era `activa` (devolución anticipada) `fin_real=now` (el monto **no** cambia). La placa recibe la ubicación y, si sigue `Rentada` **por esta misma renta**, pasa a `Disponible` con fecha NULL. Si la placa ya tiene otra renta `activa` más nueva, sólo se cierra la renta vieja y no se toca la placa.
 4. Admin puede: poner `Fuera de Servicio` placas `Disponible`; `Habilitar` placas `Fuera de Servicio` (→ `Disponible`); cambiar texto de `placa` y `ubicacion_actual` de cualquier placa no rentada.
 5. Una placa en `Ubicación no actualizada` **sí** se puede rentar (decisión del usuario), pero se muestra con aviso.
+6. **Extender** (cualquier rol, desde Recibir) una renta `activa` o `vencida_sin_recibir`: funciona como una **renta nueva aparte** que continúa a la anterior. `inicio_nuevo = renta.fin_programado`; `fin` debe ser > `max(now, inicio_nuevo) + 15 min` y ≤ `inicio_nuevo + 90 días`. Si la renta está `vencida_sin_recibir`, la placa debe estar `Disponible` (si fue re-rentada o puesta fuera de servicio → 409 "La placa ya no está disponible para extender"). Efecto en una transacción (con `FOR UPDATE` sobre placa y renta): renta vieja → `finalizada` (`fin_real = fin_programado`, `recibida_por = usuario`, `recibida_en = now`, `ubicacion_recibida = NULL`); renta nueva `activa` con el usuario actual, monto con `cotizar(precios, inicio_nuevo, fin)`; placa → `Rentada`, `fecha_hora_finalizacion = fin`, ubicación sin cambios. En métricas cuenta como una renta más.
 
 ---
 
@@ -159,6 +160,8 @@ interface Renta { id: string; placa_id: string; placa: string; vehiculo_id: stri
 | POST `/api/rentas/cotizar` | any | `{placa_ids: string[] (≥1), fin: string}` | `CotizacionResp` (no valida estado, sólo fechas) |
 | POST `/api/rentas` | any | `{placa_ids, fin}` | 201 `Renta[]`; 409 "Una o más placas ya no están disponibles" |
 | GET `/api/rentas/activas` | any | — | `Renta[]` estado `activa`, orden fin_programado |
+| POST `/api/rentas/{id}/extender/cotizar` | any | `{fin}` | `CotizacionResp` (un item; `inicio` = fin_programado de la renta) |
+| POST `/api/rentas/{id}/extender` | any | `{fin}` | 201 `Renta` (la nueva); 404; 409 si la renta ya está finalizada o la placa no está disponible; 422 fechas (regla 6) |
 | GET `/api/recibir` | any | — | `{vencidas: Renta[], hoy: Renta[], sin_ubicacion: Placa&{vehiculo:string}[]}` — `vencidas` = estado `vencida_sin_recibir`; `hoy` = `activa` con fin_programado dentro del día CR de hoy; `sin_ubicacion` = placas con ubicación `Ubicación no actualizada` sin renta vencida pendiente |
 | POST `/api/recibir` | any | `{renta_ids?: string[], placa_ids?: string[], ubicacion: Ubicacion real}` (`placa_ids` es para las de `sin_ubicacion`: sólo actualiza ubicación) | `{rentas_finalizadas: number, placas_actualizadas: number}` |
 | GET `/api/metricas?meses=12` | admin | — | ver abajo |
@@ -337,6 +340,7 @@ Leyenda: `‖` = en paralelo dentro de la ola. Cada ola empieza cuando la anteri
 - **F7 (S)** Sheet de renta (`components/rentas/RentarSheet.tsx`) e integración en F6 vía prop `onRentar` (F6 deja el botón llamando `openRentar(placas)`; F7 exporta `RentarSheet` con props `{open, onClose, placas: Placa[], onDone}`). — commit `feat(web): flujo de renta con cotización en vivo`
 - **F8 (S)** Pantalla 6 Recibir (`recibir/page.tsx`, `components/rentas/RecibirSheet.tsx`). — commit `feat(web): sección Recibir`
 - **F9 (S)** Pantalla 7 Dashboard (`admin/dashboard/page.tsx`, `components/dashboard/*`). Cargar skill `dataviz` antes de los gráficos. — commit `feat(web): dashboard de métricas`
+- **F11 (S)** Extender desde Recibir: botón "Extender" en ítems de "Vencidas sin recibir" y "Vencen hoy" → `components/rentas/ExtenderSheet.tsx` (como RentarSheet: fin + chips + cotización en vivo con `/rentas/{id}/extender/cotizar`, confirmar → `/rentas/{id}/extender`). — commit `feat(web): extender renta desde Recibir`
 - **F10 (S)** Pantallas 8 y 9 (`admin/usuarios/*`, `admin/vehiculos/*`). — commit `feat(web): registro de usuarios y vehículos`
 
 ### FASE 6 — QA de integración (orquestador + 1 agente S, secuencial)
