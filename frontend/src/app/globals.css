@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg: #ffffff;
+  --surface: #f5f5f5;
+  --surface-2: #ebebeb;
+  --ink: #0a0a0a;
+  --ink-muted: #5c5c5c;
+  --border: #e2e2e2;
+  --red: #cc0000;
+  --red-hover: #a80000;
+  --red-soft: #fdecec;
+}
+
+.dark {
+  --bg: #0a0a0a;
+  --surface: #151515;
+  --surface-2: #1f1f1f;
+  --ink: #f5f5f5;
+  --ink-muted: #a3a3a3;
+  --border: #2a2a2a;
+  --red: #e10600;
+  --red-hover: #ff2a1f;
+  --red-soft: #2a0b0a;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-border: var(--border);
+  --color-red: var(--red);
+  --color-red-hover: var(--red-hover);
+  --color-red-soft: var(--red-soft);
+  --color-ok: #16a34a;
+  --color-warn: #d97706;
+  --color-off: #737373;
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-barlow-condensed), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  @apply bg-bg text-ink font-sans antialiased;
+}
+
+/* Acento diagonal rojo junto a títulos de sección */
+.racing-stripe {
+  display: inline-block;
+  width: 28px;
+  height: 14px;
+  flex: none;
+  background: linear-gradient(
+    115deg,
+    var(--red) 0 38%,
+    transparent 38% 52%,
+    var(--red) 52% 78%,
+    transparent 78% 100%
+  );
+  transform: skewX(-12deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
