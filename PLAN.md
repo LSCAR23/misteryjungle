@@ -14,7 +14,7 @@ Este documento es la **fuente de verdad** para los subagentes: todo contrato (ta
 | Monto de renta | **Automático por duración**: la combinación de tarifas más barata que cubre la duración (ver §4). Se guarda en la renta. |
 | Fin de renta | Al pasar `fecha_hora_finalizacion` la placa pasa sola a `Disponible` con ubicación `Ubicación no actualizada` y la renta queda `vencida_sin_recibir`. La sección **Recibir** obliga a elegir ubicación. |
 | Tema visual | Claro **y** oscuro con toggle. Blanco, negro y rojo Honda. Mobile first. |
-| BD producción | Render Postgres (free, región Ohio). API FastAPI en Render (Docker). Front en Vercel. |
+| BD producción | Neon (aws-us-east-2). API FastAPI en Render (Docker, Ohio). Front en Vercel. |
 | Repo | GitHub **público** `LSCAR23/misteryjungle`. **Un commit por microtarea.** Ningún secreto en el repo. |
 | Usuarios seed | Oscar, Daniel (empleado); Ivan, Fabian (admin). Contraseña = env `SEED_PASSWORD` (nunca en código). |
 | Zona horaria | `America/Costa_Rica` (UTC−06:00 fijo, sin horario de verano). En BD todo es `timestamptz` (UTC). |
