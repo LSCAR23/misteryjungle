@@ -35,7 +35,7 @@ export function RecibirItem({ data, variant, selected, onToggle, onRecibir, onEx
   return (
     <div
       className={cn(
-        "flex items-start gap-3 rounded-2xl border bg-bg p-3 shadow-sm dark:shadow-none",
+        "flex flex-wrap items-start gap-3 rounded-2xl border bg-bg p-3 shadow-sm dark:shadow-none",
         variant === "vencida" ? "border-l-4 border-border border-l-warn" : "border-border",
         selected && "ring-2 ring-red",
       )}
@@ -48,7 +48,7 @@ export function RecibirItem({ data, variant, selected, onToggle, onRecibir, onEx
           className="size-8"
         />
       </label>
-      <div className="min-w-0 flex-1 space-y-1">
+      <div className="min-w-0 flex-1 basis-40 space-y-1">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
           <span className="font-semibold">{vehiculo}</span>
           <span className="font-mono text-sm text-ink-muted">{placa}</span>
@@ -70,7 +70,7 @@ export function RecibirItem({ data, variant, selected, onToggle, onRecibir, onEx
           </>
         )}
       </div>
-      <div className="flex shrink-0 flex-wrap justify-end gap-2">
+      <div className="flex w-full shrink-0 gap-2 pl-14 sm:w-auto sm:pl-0 [&>*]:flex-1 sm:[&>*]:flex-none">
         {onExtender && data.kind === "renta" && (
           <Button size="sm" variant="outline" onClick={onExtender} className="min-h-11 shrink-0">
             <CalendarPlus className="size-4" aria-hidden="true" />
