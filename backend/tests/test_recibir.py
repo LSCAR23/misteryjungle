@@ -188,3 +188,21 @@ def test_ids_vacios_422(client, empleado_headers):
 
 def test_requiere_auth(client):
     assert client.get("/api/recibir").status_code == 401
+
+
+def test_sin_ubicacion_excluye_placas_rentadas(client, db, empleado_headers):
+    """Una placa extendida sigue con 'Ubicación no actualizada' pero está rentada: no se lista."""
+    from datetime import timedelta
+
+    from app.enums import EstadoPlaca, Ubicacion
+    from app.models import Placa
+    from app.timeutil import now_utc
+
+    placa = db.query(Placa).filter(Placa.estado == EstadoPlaca.DISPONIBLE).first()
+    placa.estado = EstadoPlaca.RENTADA
+    placa.fecha_hora_finalizacion = now_utc() + timedelta(days=2)
+    placa.ubicacion_actual = Ubicacion.NO_ACTUALIZADA
+    db.flush()
+    r = client.get("/api/recibir", headers=empleado_headers)
+    assert r.status_code == 200
+    assert str(placa.id) not in {p["id"] for p in r.json()["sin_ubicacion"]}

@@ -122,6 +122,7 @@ def calcular(db: Session, now: datetime, meses: int = 12) -> dict:
     sin_ubic = db.scalar(
         sa.select(sa.func.count(Placa.id)).where(
             Placa.ubicacion_actual == Ubicacion.NO_ACTUALIZADA,
+            Placa.estado != EstadoPlaca.RENTADA,
             ~sa.exists().where(
                 Renta.placa_id == Placa.id, Renta.estado == EstadoRenta.VENCIDA_SIN_RECIBIR
             ),

@@ -70,7 +70,11 @@ def listar(_: CurrentUser, db: DbSession):
         sa.select(Placa)
         .join(Vehiculo, Vehiculo.id == Placa.vehiculo_id)
         .options(selectinload(Placa.vehiculo))
-        .where(Placa.ubicacion_actual == Ubicacion.NO_ACTUALIZADA, ~pendiente)
+        .where(
+            Placa.ubicacion_actual == Ubicacion.NO_ACTUALIZADA,
+            Placa.estado != EstadoPlaca.RENTADA,  # las rentadas se ubican al recibirlas
+            ~pendiente,
+        )
         .order_by(Vehiculo.marca, Vehiculo.modelo, Placa.placa, Placa.id)
     ).all()
     return RecibirOut(
