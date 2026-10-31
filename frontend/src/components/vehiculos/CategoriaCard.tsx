@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { Card, cn } from "@/components/ui";
 import { categoriaLabel, categoriaToSlug } from "@/lib/categorias";
+import { imagenCategoria } from "@/lib/imagenes";
 import type { CategoriaResumen } from "@/lib/types";
 
 export default function CategoriaCard({ resumen }: { resumen: CategoriaResumen }) {
   const { categoria, disponibles, total } = resumen;
   const pct = total > 0 ? Math.round((disponibles / total) * 100) : 0;
   const vacio = disponibles === 0;
+  const img = imagenCategoria(categoria);
   return (
     <Link
       href={`/disponibilidad/${categoriaToSlug(categoria)}`}
@@ -16,10 +18,12 @@ export default function CategoriaCard({ resumen }: { resumen: CategoriaResumen }
         <div className="flex aspect-[3/2] items-center justify-center rounded-xl bg-surface">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={`/vehiculos/placeholders/${categoria}.svg`}
+            src={img.src}
+            srcSet={img.srcSet || undefined}
+            sizes="(min-width: 1024px) 20vw, (min-width: 768px) 33vw, 50vw"
             alt=""
-            loading="lazy"
-            className="size-full object-contain p-[14%] opacity-70 dark:invert"
+            decoding="async"
+            className="size-full object-contain p-[12%] dark:invert"
           />
         </div>
         <h2 className="font-display text-xl font-bold uppercase tracking-wide">{categoriaLabel(categoria)}</h2>
@@ -27,7 +31,7 @@ export default function CategoriaCard({ resumen }: { resumen: CategoriaResumen }
           <span className={cn("font-display text-4xl font-bold tabular-nums", vacio && "text-ink-muted")}>
             {disponibles}
           </span>
-          <span className="text-sm text-ink-muted">de {total} disponibles</span>
+          <span className="text-sm text-ink-muted">de {total} {total === 1 ? "disponible" : "disponibles"}</span>
         </div>
         <div
           role="progressbar"
